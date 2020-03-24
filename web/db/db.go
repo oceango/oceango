@@ -2,21 +2,22 @@ package db
 
 import (
 	"fmt"
+	"log"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"github.com/spf13/viper"
-	"log"
 )
 
 var db *gorm.DB
 
 type DataSource struct {
 	DriverName string
-	Host string
-	Port string
-	Database string
-	Username string
-	Password string
+	Host       string
+	Port       string
+	Database   string
+	Username   string
+	Password   string
 }
 
 func GetDb() *gorm.DB {
@@ -44,7 +45,8 @@ func GetDb() *gorm.DB {
 		return nil
 	}
 
-	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", dataSource.Username, dataSource.Password, dataSource.Host,dataSource.Port, dataSource.Database)
+	// TODO Need Refactoring
+	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Asia%2fShanghai", dataSource.Username, dataSource.Password, dataSource.Host, dataSource.Port, dataSource.Database)
 	//args := "root:root@tcp(localhost:3306)/testoceango?charset=utf8"
 	db, err = gorm.Open(dataSource.DriverName, args)
 	if err != nil {
@@ -55,5 +57,3 @@ func GetDb() *gorm.DB {
 	// TODO is there need close db
 	return db
 }
-
-
